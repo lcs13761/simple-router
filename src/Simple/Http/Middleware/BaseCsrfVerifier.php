@@ -94,7 +94,7 @@ class BaseCsrfVerifier implements IMiddleware
     {
         if ($this->skip($request) === false && $request->isPostBack() === true) {
 
-            $token = $request->getInputHandler()->value(
+            $token = $request->value(
                 static::POST_KEY,
                 $request->getHeader(static::HEADER_KEY),
                 Request::$requestTypesPost
