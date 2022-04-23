@@ -3,7 +3,7 @@
 namespace Simple\Http\Security;
 
 use Exception;
-use Pecee\Http\Security\Exceptions\SecurityException;
+use Simple\Http\Security\Exceptions\SecurityException;
 
 class CookieTokenProvider implements ITokenProvider
 {
