@@ -72,7 +72,7 @@ trait InputHandler
         }
 
         if (count($this->originalPost) !== 0) {
-            $this->parseInputItem($this->originalPost);
+            $this->post = $this->parseInputItem($this->originalPost);
         }
 
         /* Parse get requests */
@@ -179,31 +179,6 @@ trait InputHandler
     }
 
     /**
-     * Parse input item from array
-     *
-     * @param array $array
-     * @return array
-     */
-    protected function parseInputItem(array $array): array
-    {
-        $list = [];
-
-        foreach ($array as $key => $value) {
-
-            // Handle array input
-            if (is_array($value) === true) {
-                $value = $this->parseInputItem($value);
-            }
-
-            $this->$key = $value;
-
-            $list[$key] = $this;
-        }
-
-        return $list;
-    }
-
-    /**
      * Find input object
      *
      * @param string $index
@@ -261,17 +236,13 @@ trait InputHandler
     {
         $input = $this->find($index, ...$methods);
 
-        if ($input instanceof IInputItem) {
-
-            $input = $input->getValue();
-        }
-
         /* Handle collection */
         if (is_array($input) === true) {
             $output = $this->getValueFromArray($input);
             return (count($output) === 0) ? $defaultValue : $output;
         }
-
+        
+        $input = $input?->$index;
 
         return ($input === null || (is_string($input) && trim($input) === '')) ? $defaultValue : $input;
     }
@@ -309,7 +280,6 @@ trait InputHandler
      */
     public function post(string $index, $defaultValue = null)
     {
-
         return $this->post[$index] ?? $defaultValue;
     }
 

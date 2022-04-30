@@ -17,9 +17,6 @@
     "request-handler"
   ],
   "license": "MIT",
-  "support": {
-    "source": ""
-  },
   "authors": [
     {
       "name": "Simon Sessingø",
@@ -27,7 +24,7 @@
     }
   ],
   "require": {
-    "php": "^7.3|^8.0",
+    "php": "^8.0",
     "ext-json": "*"
   },
   "require-dev": {
@@ -48,6 +45,8 @@
       "Simple\\": "src/Simple/",
       "Controller\\": "controller/"
     },
-    "files" : ["helpers.php"]
+    "files": [
+      "helpers.php"
+    ]
   }
 }

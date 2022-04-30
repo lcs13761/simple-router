@@ -17,7 +17,10 @@ use Simple\Exceptions\InvalidArgumentException;
 use Simple\Http\Middleware\BaseCsrfVerifier;
 use Simple\Http\Request;
 use Simple\Http\Response;
+use Simple\Http\Security\Csrf\CsrfDefault;
+use Simple\Http\Security\Csrf\SessionTokenProvider;
 use Simple\Http\Url;
+use Simple\Session\Session;
 use Simple\SimpleRouter\ClassLoader\IClassLoader;
 use Simple\SimpleRouter\Exceptions\HttpException;
 use Simple\SimpleRouter\Handlers\CallbackExceptionHandler;
@@ -52,6 +55,11 @@ class SimpleRouter
      */
     protected static $router;
 
+
+    public function __construct()
+    {
+        $session = new Session();
+    }
     /**
      * Start routing
      *
@@ -136,10 +144,14 @@ class SimpleRouter
     /**
      * Base CSRF verifier
      *
-     * @param BaseCsrfVerifier $baseCsrfVerifier
+     * @param BaseCsrfVerifier|bool $baseCsrfVerifier
      */
-    public static function csrfVerifier(BaseCsrfVerifier $baseCsrfVerifier): void
+    public static function csrfVerifier(BaseCsrfVerifier|null $baseCsrfVerifier = null): void
     {
+        if($baseCsrfVerifier === null){
+            $baseCsrfVerifier = new CsrfDefault();
+            $baseCsrfVerifier->setTokenProvider(new SessionTokenProvider());
+        }
         static::router()->setCsrfVerifier($baseCsrfVerifier);
     }
 
