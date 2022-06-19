@@ -35,7 +35,7 @@ abstract class Route implements IRoute
     protected $group;
     protected $parent;
     /**
-     * @var string|callable|null
+     * @var string|callable|null|array
      */
     protected $callback;
     protected $defaultNamespace;
@@ -198,7 +198,7 @@ abstract class Route implements IRoute
      */
     public function getIdentifier(): string
     {
-      
+
         if (is_string($this->callback) === true && strpos($this->callback, '@') !== false) {
             return $this->callback;
         }
@@ -313,7 +313,7 @@ abstract class Route implements IRoute
 
     public function getClass(): ?string
     {
-        
+
         if (is_array($this->callback) === true && count($this->callback) > 0) {
             return $this->callback[0];
         }

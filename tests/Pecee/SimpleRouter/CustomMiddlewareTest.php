@@ -6,9 +6,10 @@ require_once 'Dummy/Middleware/IpRestrictMiddleware.php';
 class CustomMiddlewareTest extends \PHPUnit\Framework\TestCase
 {
 
-    public function testIpBlock() {
+    public function testIpBlock()
+    {
 
-        $this->expectException(\Pecee\SimpleRouter\Exceptions\HttpException::class);
+        $this->expectException(\Simple\SimpleRouter\Exceptions\HttpException::class);
 
         global $_SERVER;
 
@@ -16,7 +17,7 @@ class CustomMiddlewareTest extends \PHPUnit\Framework\TestCase
 
         $_SERVER['remote-addr'] = '5.5.5.5';
 
-        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function() {
+        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function () {
             TestRouter::get('/fail', 'DummyController@method1');
         });
 
@@ -28,15 +29,15 @@ class CustomMiddlewareTest extends \PHPUnit\Framework\TestCase
 
         TestRouter::router()->reset();
 
-        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function() {
+        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function () {
             TestRouter::get('/fail', 'DummyController@method1');
         });
 
         TestRouter::debug('/fail');
-
     }
 
-    public function testIpSuccess() {
+    public function testIpSuccess()
+    {
 
         global $_SERVER;
 
@@ -46,7 +47,7 @@ class CustomMiddlewareTest extends \PHPUnit\Framework\TestCase
 
         TestRouter::router()->reset();
 
-        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function() {
+        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function () {
             TestRouter::get('/success', 'DummyController@method1');
         });
 
@@ -58,14 +59,12 @@ class CustomMiddlewareTest extends \PHPUnit\Framework\TestCase
 
         TestRouter::router()->reset();
 
-        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function() {
+        TestRouter::group(['middleware' => IpRestrictMiddleware::class], function () {
             TestRouter::get('/success', 'DummyController@method1');
         });
 
         TestRouter::debug('/success');
 
         $this->assertTrue(true);
-
     }
-
 }

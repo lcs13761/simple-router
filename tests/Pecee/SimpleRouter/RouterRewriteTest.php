@@ -38,14 +38,12 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['prefix' => '/test', 'exceptionHandler' => ExceptionHandlerThird::class], function () {
 
                 TestRouter::get('/my-path', 'DummyController@method1');
-
             });
         });
 
         try {
             TestRouter::debug('/test/non-existing', 'get');
         } catch (\ResponseException $e) {
-
         }
 
         $expectedStack = [
@@ -55,7 +53,6 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals($expectedStack, $stack);
-
     }
 
     public function testStopMergeExceptionHandlers()
@@ -68,14 +65,12 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['prefix' => '/admin', 'exceptionHandler' => ExceptionHandlerSecond::class, 'mergeExceptionHandlers' => false], function () {
 
                 TestRouter::get('/my-path', 'DummyController@method1');
-
             });
         });
 
         try {
             TestRouter::debug('/admin/my-path-test', 'get');
-        } catch (\Pecee\SimpleRouter\Exceptions\NotFoundHttpException $e) {
-
+        } catch (\Simple\SimpleRouter\Exceptions\NotFoundHttpException $e) {
         }
 
         $expectedStack = [
@@ -87,14 +82,13 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
 
     public function testRewriteExceptionMessage()
     {
-        $this->expectException(\Pecee\SimpleRouter\Exceptions\NotFoundHttpException::class);
+        $this->expectException(\Simple\SimpleRouter\Exceptions\NotFoundHttpException::class);
 
-        TestRouter::error(function (\Pecee\Http\Request $request, \Exception $error) {
+        TestRouter::error(function (\Simple\Http\Request $request, \Exception $error) {
 
             if (strtolower($request->getUrl()->getPath()) === '/my/test/') {
                 $request->setRewriteUrl('/another-non-existing');
             }
-
         });
 
         TestRouter::debug('/my/test', 'get');
@@ -122,7 +116,6 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
         $output = TestRouter::debugOutput('/old');
 
         $this->assertEquals('ok', $output);
-
     }
 
     public function testRewriteCallbackFromRoute()
@@ -149,14 +142,13 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
         TestRouter::router()->reset();
 
         $this->assertEquals('ok', $output);
-
     }
 
     public function testRewriteRouteFromRoute()
     {
 
         TestRouter::get('/match', function () {
-            TestRouter::request()->setRewriteRoute(new \Pecee\SimpleRouter\Route\RouteUrl('/match', function () {
+            TestRouter::request()->setRewriteRoute(new \Simple\SimpleRouter\Route\RouteUrl('/match', function () {
                 return 'ok';
             }));
         });
@@ -178,7 +170,6 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
         TestRouter::router()->reset();
 
         $this->assertEquals('ok', $output);
-
     }
 
     public function testMiddlewareRewrite()
@@ -197,7 +188,5 @@ class RouterRewriteTest extends \PHPUnit\Framework\TestCase
         $output = TestRouter::debugOutput('/');
 
         $this->assertEquals('ok', $output);
-
     }
-
 }

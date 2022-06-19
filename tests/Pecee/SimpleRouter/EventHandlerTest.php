@@ -6,8 +6,8 @@ require_once 'Dummy/Handler/ExceptionHandler.php';
 require_once 'Dummy/Security/SilentTokenProvider.php';
 require_once 'Dummy/Managers/TestBootManager.php';
 
-use Pecee\SimpleRouter\Event\EventArgument;
-use Pecee\SimpleRouter\Handlers\EventHandler;
+use Simple\SimpleRouter\Event\EventArgument;
+use Simple\SimpleRouter\Handlers\EventHandler;
 
 class EventHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,11 +28,10 @@ class EventHandlerTest extends \PHPUnit\Framework\TestCase
         TestRouter::addEventHandler($eventHandler);
 
         // Add rewrite
-        TestRouter::error(function (\Pecee\Http\Request $request, \Exception $error) {
+        TestRouter::error(function (\Simple\Http\Request $request, \Exception $error) {
 
             // Trigger rewrite
             $request->setRewriteUrl('/');
-
         });
 
         TestRouter::get('/', 'DummyController@method1')->name('home');
@@ -44,7 +43,7 @@ class EventHandlerTest extends \PHPUnit\Framework\TestCase
         TestRouter::router()->getUrl('home');
 
         // Add csrf-verifier
-        $csrfVerifier = new \Pecee\Http\Middleware\BaseCsrfVerifier();
+        $csrfVerifier = new \Simple\Http\Middleware\BaseCsrfVerifier();
         $csrfVerifier->setTokenProvider(new SilentTokenProvider());
         TestRouter::csrfVerifier($csrfVerifier);
 
@@ -83,10 +82,9 @@ class EventHandlerTest extends \PHPUnit\Framework\TestCase
         $eventHandler = new EventHandler();
         $eventHandler->register(EventHandler::EVENT_ADD_ROUTE, function (EventArgument $arg) use (&$status) {
 
-            if ($arg->route instanceof \Pecee\SimpleRouter\Route\LoadableRoute) {
+            if ($arg->route instanceof \Simple\SimpleRouter\Route\LoadableRoute) {
                 $arg->route->prependUrl('/local-path');
             }
-
         });
 
         TestRouter::addEventHandler($eventHandler);
@@ -100,42 +98,40 @@ class EventHandlerTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug('/local-path');
 
         $this->assertTrue($status);
-
     }
 
-    public function testCustomBasePath() {
+    public function testCustomBasePath()
+    {
 
         $basePath = '/basepath/';
 
         $eventHandler = new EventHandler();
-        $eventHandler->register(EventHandler::EVENT_ADD_ROUTE, function(EventArgument $data) use($basePath) {
+        $eventHandler->register(EventHandler::EVENT_ADD_ROUTE, function (EventArgument $data) use ($basePath) {
 
             // Skip routes added by group
-            if($data->isSubRoute === false) {
+            if ($data->isSubRoute === false) {
 
                 switch (true) {
-                    case $data->route instanceof \Pecee\SimpleRouter\Route\ILoadableRoute:
+                    case $data->route instanceof \Simple\SimpleRouter\Route\ILoadableRoute:
                         $data->route->prependUrl($basePath);
                         break;
-                    case $data->route instanceof \Pecee\SimpleRouter\Route\IGroupRoute:
+                    case $data->route instanceof \Simple\SimpleRouter\Route\IGroupRoute:
                         $data->route->prependPrefix($basePath);
                         break;
-
                 }
             }
-
         });
 
         $results = [];
 
         TestRouter::addEventHandler($eventHandler);
 
-        TestRouter::get('/about', function() use(&$results) {
+        TestRouter::get('/about', function () use (&$results) {
             $results[] = 'about';
         });
 
-        TestRouter::group(['prefix' => '/admin'], function() use(&$results) {
-            TestRouter::get('/', function() use(&$results) {
+        TestRouter::group(['prefix' => '/admin'], function () use (&$results) {
+            TestRouter::get('/', function () use (&$results) {
                 $results[] = 'admin';
             });
         });
@@ -145,7 +141,5 @@ class EventHandlerTest extends \PHPUnit\Framework\TestCase
         TestRouter::debugNoReset('/basepath/admin');
 
         $this->assertEquals(['about', 'admin'], $results);
-
     }
-
 }

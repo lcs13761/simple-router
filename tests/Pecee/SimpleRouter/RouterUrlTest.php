@@ -106,14 +106,12 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
 
             // Match controller with prefix and NO alias
             TestRouter::controller('/pages', 'DummyController');
-
         });
 
         TestRouter::group(['prefix' => 'api', 'as' => 'api'], function () {
 
             // Match resource controller
             TestRouter::resource('phones', 'DummyController');
-
         });
 
         TestRouter::controller('gadgets', 'DummyController', ['names' => ['getIphoneInfo' => 'iphone']]);
@@ -168,7 +166,6 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/?jackdaniels=true&cola=yeah', TestRouter::getUrl('home', null, ['jackdaniels' => 'true', 'cola' => 'yeah']));
 
         TestRouter::router()->reset();
-
     }
 
     public function testCustomRegex()
@@ -191,7 +188,7 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
 
         $results = '';
 
-        TestRouter::get('/tester/{param}', function ($param = null) use($results) {
+        TestRouter::get('/tester/{param}', function ($param = null) use ($results) {
             return $results = $param;
         })->setMatch('/(.*)/i');
 
@@ -234,9 +231,9 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
 
         TestRouter::debug('/');
 
-        $this->assertCount(2, $result);    
+        $this->assertCount(2, $result);
     }
-  
+
     public function testDefaultNamespace()
     {
         TestRouter::setDefaultNamespace('\\Default\\Namespace');
@@ -256,7 +253,6 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
             ], function () {
 
                 TestRouter::get('/', 'DummyController@method1');
-
             });
         });
 
@@ -266,7 +262,7 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
 
         try {
             TestRouter::debugNoReset('/horses/');
-        } catch (\Pecee\SimpleRouter\Exceptions\ClassNotFoundHttpException $e) {
+        } catch (\Simple\SimpleRouter\Exceptions\ClassNotFoundHttpException $e) {
             $class = $e->getClass();
         }
 
@@ -278,7 +274,7 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
 
         try {
             TestRouter::debugNoReset('/horses/race');
-        } catch (\Pecee\SimpleRouter\Exceptions\ClassNotFoundHttpException $e) {
+        } catch (\Simple\SimpleRouter\Exceptions\ClassNotFoundHttpException $e) {
             $class = $e->getClass();
         }
 
@@ -287,13 +283,14 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
         TestRouter::router()->reset();
     }
 
-    public function testGroupPrefix() {
+    public function testGroupPrefix()
+    {
 
         $result = false;
 
-        TestRouter::group(['prefix' => '/lang/{lang}'], function () use(&$result) {
+        TestRouter::group(['prefix' => '/lang/{lang}'], function () use (&$result) {
 
-            TestRouter::get('/test', function() use(&$result) {
+            TestRouter::get('/test', function () use (&$result) {
                 $result = true;
             });
         });
@@ -307,13 +304,13 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
         $result = null;
         $expectedResult = 28;
 
-        TestRouter::group(['prefix' => '/lang/{lang}'], function () use(&$result) {
+        TestRouter::group(['prefix' => '/lang/{lang}'], function () use (&$result) {
 
-            TestRouter::get('/horse/{horseType}', function($horseType) use(&$result) {
+            TestRouter::get('/horse/{horseType}', function ($horseType) use (&$result) {
                 $result = false;
             });
 
-            TestRouter::get('/user/{userId}', function($userId) use(&$result) {
+            TestRouter::get('/user/{userId}', function ($userId) use (&$result) {
                 $result = $userId;
             });
         });
@@ -321,47 +318,43 @@ class RouterUrlTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug("/lang/da/user/$expectedResult");
 
         $this->assertEquals($expectedResult, $result);
-
     }
 
-    public function testPassParameter() {
+    public function testPassParameter()
+    {
 
         $result = false;
         $expectedLanguage = 'da';
 
-        TestRouter::group(['prefix' => '/lang/{lang}'], function ($language) use(&$result) {
+        TestRouter::group(['prefix' => '/lang/{lang}'], function ($language) use (&$result) {
 
-            TestRouter::get('/test', function($language) use(&$result) {
+            TestRouter::get('/test', function ($language) use (&$result) {
                 $result = $language;
             });
-
         });
 
         TestRouter::debug("/lang/$expectedLanguage/test");
 
         $this->assertEquals($expectedLanguage, $result);
-
     }
 
-    public function testPassParameterDeep() {
+    public function testPassParameterDeep()
+    {
 
         $result = false;
         $expectedLanguage = 'da';
 
-        TestRouter::group(['prefix' => '/lang/{lang}'], function ($language) use(&$result) {
+        TestRouter::group(['prefix' => '/lang/{lang}'], function ($language) use (&$result) {
 
-            TestRouter::group(['prefix' => '/admin'], function($language) use(&$result) {
-                TestRouter::get('/test', function($language) use(&$result) {
+            TestRouter::group(['prefix' => '/admin'], function ($language) use (&$result) {
+                TestRouter::get('/test', function ($language) use (&$result) {
                     $result = $language;
                 });
             });
-
         });
 
         TestRouter::debug("/lang/$expectedLanguage/admin/test");
 
         $this->assertEquals($expectedLanguage, $result);
-
     }
-
 }

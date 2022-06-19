@@ -4,7 +4,7 @@ namespace Simple\Http\Trait;
 
 use Simple\Exceptions\InvalidArgumentException;
 
-trait InputFile 
+trait InputFile
 {
     /**
      * @var string|null
@@ -30,12 +30,6 @@ trait InputFile
      * @var string|null
      */
     public $tmpName;
-    // $this->index = $index;
-
-    // $this->errors = 0;
-
-    // // Make the name human friendly, by replace _ with space
-    // $this->name = ucfirst(str_replace('_', ' ', strtolower($this->index)));
 
     /**
      * Create from array
@@ -66,7 +60,6 @@ trait InputFile
             ->setType($values['type'])
             ->setTmpName($values['tmp_name'])
             ->setFilename($values['name']);
-
     }
 
     /**
@@ -252,5 +245,4 @@ trait InputFile
             'filename' => $this->filename,
         ];
     }
-
 }

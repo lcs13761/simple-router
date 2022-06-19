@@ -1,6 +1,6 @@
 <?php
 
-use Pecee\Http\Input\InputFile;
+use Simple\Http\Input\InputFile;
 
 require_once 'Dummy/DummyMiddleware.php';
 require_once 'Dummy/DummyController.php';
@@ -45,33 +45,26 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router->reset();
         $router->getRequest()->setMethod('post');
 
-        $handler = TestRouter::request()->getInputHandler();
+        $handler = TestRouter::request();
 
-        $this->assertEquals($this->names, $handler->value('names'));
+        $this->assertEquals($this->names, $handler->get('names'));
         $this->assertEquals($this->names, $handler->all(['names'])['names']);
-        $this->assertEquals($this->day, $handler->value('day'));
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $handler->find('day'));
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $handler->post('day'));
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $handler->find('day', 'post'));
+        $this->assertEquals($this->day, $handler->get('day'));
 
         // Check non-existing and wrong request-type
         $this->assertCount(1, $handler->all(['non-existing']));
         $this->assertEmpty($handler->all(['non-existing'])['non-existing']);
-        $this->assertNull($handler->value('non-existing'));
+        $this->assertNull($handler->get('non-existing'));
         $this->assertNull($handler->find('non-existing'));
-        $this->assertNull($handler->value('names', null, 'get'));
-        $this->assertNull($handler->find('names', 'get'));
         $this->assertEquals($this->sodas, $handler->value('sodas'));
 
         $objects = $handler->find('names');
 
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $objects);
         $this->assertCount(4, $objects);
 
-        /* @var $object \Pecee\Http\Input\InputItem */
-        foreach($objects as $i => $object) {
-            $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $object);
-            $this->assertEquals($this->names[$i], $object->getValue());
+        /* @var $object \Simple\Http\Input\InputItem */
+        foreach ($objects as $i => $object) {
+            $this->assertEquals($this->names[$i], $object);
         }
 
         // Reset
@@ -91,13 +84,11 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router->reset();
         $router->getRequest()->setMethod('get');
 
-        $handler = TestRouter::request()->getInputHandler();
+        $handler = TestRouter::request();
 
-        $this->assertEquals($this->names, $handler->value('names'));
+        $this->assertEquals($this->names, $handler->get('names'));
         $this->assertEquals($this->names, $handler->all(['names'])['names']);
-        $this->assertEquals($this->day, $handler->value('day'));
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $handler->find('day'));
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $handler->get('day'));
+        $this->assertEquals($this->day, $handler->get('day'));
 
         // Check non-existing and wrong request-type
         $this->assertCount(1, $handler->all(['non-existing']));
@@ -108,21 +99,19 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($handler->find('names', 'post'));
 
         $objects = $handler->find('names');
-
-        $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $objects);
         $this->assertCount(4, $objects);
 
-        /* @var $object \Pecee\Http\Input\InputItem */
-        foreach($objects as $i => $object) {
-            $this->assertInstanceOf(\Pecee\Http\Input\InputItem::class, $object);
-            $this->assertEquals($this->names[$i], $object->getValue());
+        /* @var $object \Simple\Http\Input\InputItem */
+        foreach ($objects as $i => $object) {
+            $this->assertEquals($this->names[$i], $object);
         }
 
         // Reset
         $_GET = [];
     }
 
-    public function testFindInput() {
+    public function testFindInput()
+    {
 
         global $_POST;
         $_POST['hello'] = 'motto';
@@ -130,9 +119,9 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router = TestRouter::router();
         $router->reset();
         $router->getRequest()->setMethod('post');
-        $inputHandler = TestRouter::request()->getInputHandler();
+        $inputHandler = TestRouter::request();
 
-        $value = $inputHandler->value('hello', null, \Pecee\Http\Request::$requestTypesPost);
+        $value = $inputHandler->get('hello');
 
         $this->assertEquals($_POST['hello'], $value);
     }
@@ -150,7 +139,7 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router = TestRouter::router();
         $router->reset();
         $router->getRequest()->setMethod('post');
-        $inputHandler = TestRouter::request()->getInputHandler();
+        $inputHandler = TestRouter::request();
 
         $testFileContent = md5(uniqid('test', false));
 
@@ -190,7 +179,7 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router = TestRouter::router();
         $router->reset();
         $router->getRequest()->setMethod('post');
-        $inputHandler = TestRouter::request()->getInputHandler();
+        $inputHandler = TestRouter::request();
 
         $files = $inputHandler->file('my_files');
         $this->assertCount(5, $files);
@@ -215,7 +204,6 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
             // Cleanup
             unlink($testFiles[$key]['tmp_name']);
         }
-
     }
 
     public function testAll()
@@ -237,7 +225,7 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
         $router->reset();
         $router->getRequest()->setMethod('post');
 
-        $handler = TestRouter::request()->getInputHandler();
+        $handler = TestRouter::request();
 
         // GET
         $brandsFound = $handler->all(['brands', 'nothing']);
@@ -283,5 +271,4 @@ class InputHandlerTest extends \PHPUnit\Framework\TestCase
     {
         return md5(uniqid('', false));
     }
-
 }

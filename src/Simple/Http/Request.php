@@ -222,7 +222,7 @@ class Request implements ArrayAccess, IteratorAggregate
     public function getIp(bool $safeMode = false): ?string
     {
         $headers = ['remote-addr'];
-        if($safeMode === false) {
+        if ($safeMode === false) {
             $headers = array_merge($headers, [
                 'http-cf-connecting-ip',
                 'http-client-ip',
@@ -298,9 +298,9 @@ class Request implements ArrayAccess, IteratorAggregate
      */
     public function getFirstHeader(array $headers, $defaultValue = null)
     {
-        foreach($headers as $header) {
+        foreach ($headers as $header) {
             $header = $this->getHeader($header);
-            if($header !== null) {
+            if ($header !== null) {
                 return $header;
             }
         }
@@ -324,7 +324,7 @@ class Request implements ArrayAccess, IteratorAggregate
      */
     protected function setContentType(string $contentType): self
     {
-        if(strpos($contentType, ';') > 0) {
+        if (strpos($contentType, ';') > 0) {
             $this->contentType = strtolower(substr($contentType, 0, strpos($contentType, ';')));
         } else {
             $this->contentType = strtolower($contentType);
@@ -386,7 +386,7 @@ class Request implements ArrayAccess, IteratorAggregate
             $this->url->setHost((string)$this->getHost());
         }
 
-        if($this->isSecure() === true) {
+        if ($this->isSecure() === true) {
             $this->url->setScheme('https');
         }
     }
@@ -537,14 +537,25 @@ class Request implements ArrayAccess, IteratorAggregate
         return array_key_exists($name, $this->data) === true;
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @param [type] $value
+     */
     public function __set($name, $value = null)
     {
         $this->data[$name] = $value;
     }
 
-    public function __get($name)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $name
+     * @return mixed
+     */
+    public function __get($name): mixed
     {
         return $this->data[$name] ?? null;
     }
-
 }

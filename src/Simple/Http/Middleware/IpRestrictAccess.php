@@ -1,9 +1,9 @@
 <?php
 
-namespace Pecee\Http\Middleware;
+namespace Simple\Http\Middleware;
 
-use Pecee\Http\Request;
-use Pecee\SimpleRouter\Exceptions\HttpException;
+use Simple\Http\Request;
+use Simple\SimpleRouter\Exceptions\HttpException;
 
 abstract class IpRestrictAccess implements IMiddleware
 {
@@ -13,7 +13,7 @@ abstract class IpRestrictAccess implements IMiddleware
     protected function validate(string $ip): bool
     {
         // Accept ip that is in white-list
-        if(in_array($ip, $this->ipWhitelist, true) === true) {
+        if (in_array($ip, $this->ipWhitelist, true) === true) {
             return true;
         }
 
@@ -28,7 +28,6 @@ abstract class IpRestrictAccess implements IMiddleware
             if ($blackIp === $ip) {
                 return false;
             }
-
         }
 
         return true;
@@ -40,7 +39,7 @@ abstract class IpRestrictAccess implements IMiddleware
      */
     public function handle(Request $request): void
     {
-        if($this->validate((string)$request->getIp()) === false) {
+        if ($this->validate((string)$request->getIp()) === false) {
             throw new HttpException(sprintf('Restricted ip. Access to %s has been blocked', $request->getIp()), 403);
         }
     }

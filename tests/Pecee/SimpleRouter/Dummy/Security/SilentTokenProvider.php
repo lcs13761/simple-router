@@ -1,6 +1,7 @@
 <?php
 
-class SilentTokenProvider implements \Pecee\Http\Security\ITokenProvider {
+class SilentTokenProvider implements \Simple\Http\Security\ITokenProvider
+{
 
     protected $token;
 

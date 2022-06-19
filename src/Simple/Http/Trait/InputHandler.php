@@ -82,6 +82,32 @@ trait InputHandler
         }
     }
 
+
+    /**
+     * Parse input item from array
+     *
+     * @param array $array
+     * @return array
+     */
+    protected function parseInputItem(array $array): array
+    {
+        $list = [];
+
+        foreach ($array as $key => $value) {
+
+            // Handle array input
+            if (is_array($value) === true) {
+                $value = $this->parseInputItem($value);
+            }
+
+            $this->$key = $value;
+            $this->value = $value;
+            $list[$key] = $value;
+        }
+
+        return $list;
+    }
+
     /**
      * @param array $files Array with files to parse
      * @param string|null $parentKey Key from parent (used when parsing nested array).
@@ -241,8 +267,6 @@ trait InputHandler
             $output = $this->getValueFromArray($input);
             return (count($output) === 0) ? $defaultValue : $output;
         }
-        
-        $input = $input?->$index;
 
         return ($input === null || (is_string($input) && trim($input) === '')) ? $defaultValue : $input;
     }
@@ -283,6 +307,25 @@ trait InputHandler
         return $this->post[$index] ?? $defaultValue;
     }
 
+
+    public function get(string|array $value, mixed $return = null): string | array | null
+    {
+
+        $output = $this->data;
+        if (is_string($value)) {
+            return $output[$value] ?? $return;
+        }
+
+        if (is_array($value)) {
+            $values = [];
+            foreach ($values as $value) {
+                $value[$value] = $output[$value] ?? $return;
+            }
+
+            return $values;
+        }
+    }
+
     /**
      * Find file by index or return default value.
      *
@@ -292,7 +335,6 @@ trait InputHandler
      */
     public function file(string $index, $defaultValue = null)
     {
-
         return $this->file[$index] ?? $defaultValue;
     }
 
@@ -304,7 +346,16 @@ trait InputHandler
      */
     public function all(array $filter = []): array
     {
-        return $this->data;
+        $output = $this->data;
+        $output = (count($filter) > 0) ? array_intersect_key($output, array_flip($filter)) : $output;
+
+        foreach ($filter as $filterKey) {
+            if (array_key_exists($filterKey, $output) === false) {
+                $output[$filterKey] = null;
+            }
+        }
+
+        return $output;
     }
 
     public function except(string|array $filter)

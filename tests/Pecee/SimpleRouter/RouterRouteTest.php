@@ -33,18 +33,16 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
             if ($param1 === 'param1' && $param2 === 'param2') {
                 $result = true;
             }
-
         });
 
         TestRouter::debug('/test-param1-param2', 'get');
 
         $this->assertTrue($result);
-
     }
 
     public function testNotFound()
     {
-        $this->expectException('\Pecee\SimpleRouter\Exceptions\NotFoundHttpException');
+        $this->expectException('\Simple\SimpleRouter\Exceptions\NotFoundHttpException');
         TestRouter::get('/non-existing-path', 'DummyController@method1');
         TestRouter::debug('/test-param1-param2', 'post');
     }
@@ -137,8 +135,7 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
 
         try {
             TestRouter::debug('/', 'get');
-        } catch(\Exception $e) {
-
+        } catch (\Exception $e) {
         }
 
         $this->assertFalse($result);
@@ -158,7 +155,6 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug('/test', 'get');
 
         $this->assertTrue($result);
-
     }
 
     public function testDomainNotAllowedRoute()
@@ -176,7 +172,6 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug('/test', 'get');
 
         $this->assertFalse($result);
-
     }
 
     public function testRegEx()
@@ -199,7 +194,6 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug('/my/hello-motto-man');
 
         $this->assertEquals('hello-motto-man', $defaultVariable);
-
     }
 
     public function testParameterDefaultValue()
@@ -214,7 +208,6 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
         TestRouter::debug('/my/');
 
         $this->assertEquals('working', $defaultVariable);
-
     }
 
     public function testDefaultParameterRegex()
@@ -254,7 +247,7 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
 
         $result = TestRouter::debugOutput('/test');
 
-        $this->assertTrue( (bool)$result);
+        $this->assertTrue((bool)$result);
     }
 
     public function testSameRoutes()
@@ -267,5 +260,4 @@ class RouterRouteTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue(true);
     }
-
 }

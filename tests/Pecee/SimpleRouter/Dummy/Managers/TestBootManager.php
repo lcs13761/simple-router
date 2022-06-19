@@ -1,6 +1,6 @@
 <?php
 
-class TestBootManager implements \Pecee\SimpleRouter\IRouterBootManager
+class TestBootManager implements \Simple\SimpleRouter\IRouterBootManager
 {
 
     protected $rewrite;
@@ -13,10 +13,10 @@ class TestBootManager implements \Pecee\SimpleRouter\IRouterBootManager
     /**
      * Called when router loads it's routes
      *
-     * @param \Pecee\SimpleRouter\Router $router
-     * @param \Pecee\Http\Request $request
+     * @param \Simple\SimpleRouter\Router $router
+     * @param \Simple\Http\Request $request
      */
-    public function boot(\Pecee\SimpleRouter\Router $router, \Pecee\Http\Request $request): void
+    public function boot(\Simple\SimpleRouter\Router $router, \Simple\Http\Request $request): void
     {
         foreach ($this->rewrite as $url => $rewrite) {
             // If the current url matches the rewrite url, we use our custom route
@@ -24,7 +24,6 @@ class TestBootManager implements \Pecee\SimpleRouter\IRouterBootManager
             if ($request->getUrl()->contains($url) === true) {
                 $request->setRewriteUrl($rewrite);
             }
-
         }
     }
 }

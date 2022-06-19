@@ -1,13 +1,12 @@
 <?php
 require_once 'Exception/MiddlewareLoadedException.php';
 
-use Pecee\Http\Request;
+use Simple\Http\Request;
 
-class DummyMiddleware implements \Pecee\Http\Middleware\IMiddleware
+class DummyMiddleware implements \Simple\Http\Middleware\IMiddleware
 {
-	public function handle(Request $request) : void
+	public function handle(Request $request): void
 	{
 		throw new MiddlewareLoadedException('Middleware loaded!');
 	}
-
 }

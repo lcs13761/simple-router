@@ -17,7 +17,6 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
         try {
             TestRouter::debug('/', 'get');
         } catch (\Exception $e) {
-
         }
         $this->assertTrue($result);
     }
@@ -30,7 +29,6 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['prefix' => '/v1'], function () {
                 TestRouter::get('/test', 'DummyController@method1');
             });
-
         });
 
         TestRouter::debug('/api/v1/test', 'get');
@@ -46,7 +44,6 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['prefix' => '/v1'], function () {
                 TestRouter::get('/test', 'DummyController@method1');
             });
-
         });
 
         TestRouter::get('/my/match', 'DummyController@method1');
@@ -56,7 +53,6 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['prefix' => '/v1'], function () {
                 TestRouter::get('/no-match', 'DummyController@method1');
             });
-
         });
 
         TestRouter::debug('/my/match', 'get');
@@ -78,7 +74,6 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/my/fancy/url/2/', TestRouter::getUrl('fancy2'));
 
         TestRouter::router()->reset();
-
     }
 
     public function testNamespaceExtend()
@@ -88,11 +83,9 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['namespace' => 'Service'], function () use (&$result) {
 
                 TestRouter::get('/test', function () use (&$result) {
-                    return \Pecee\SimpleRouter\SimpleRouter::router()->getRequest()->getLoadedRoute()->getNamespace();
+                    return \Simple\SimpleRouter\SimpleRouter::router()->getRequest()->getLoadedRoute()->getNamespace();
                 });
-
             });
-
         });
 
         $namespace = TestRouter::debugOutput('/test');
@@ -106,15 +99,12 @@ class RouterGroupTest extends \PHPUnit\Framework\TestCase
             TestRouter::group(['namespace' => '\Service'], function () use (&$result) {
 
                 TestRouter::get('/test', function () use (&$result) {
-                    return \Pecee\SimpleRouter\SimpleRouter::router()->getRequest()->getLoadedRoute()->getNamespace();
+                    return \Simple\SimpleRouter\SimpleRouter::router()->getRequest()->getLoadedRoute()->getNamespace();
                 });
-
             });
-
         });
 
         $namespace = TestRouter::debugOutput('/test');
         $this->assertEquals('\Service', $namespace);
     }
-
 }

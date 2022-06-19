@@ -1,6 +1,6 @@
 <?php
 
-class TestRouter extends \Pecee\SimpleRouter\SimpleRouter
+class TestRouter extends \Simple\SimpleRouter\SimpleRouter
 {
 
     public function __construct()
@@ -12,7 +12,7 @@ class TestRouter extends \Pecee\SimpleRouter\SimpleRouter
     {
         $request = static::request();
 
-        $request->setUrl((new \Pecee\Http\Url($testUrl))->setHost('local.unitTest'));
+        $request->setUrl((new \Simple\Http\Url($testUrl))->setHost('local.unitTest'));
         $request->setMethod($testMethod);
 
         static::start();
@@ -32,7 +32,6 @@ class TestRouter extends \Pecee\SimpleRouter\SimpleRouter
             static::$defaultNamespace = null;
             static::router()->reset();
         }
-
     }
 
     public static function debugOutput(string $testUrl, string $testMethod = 'get', bool $reset = true): string
@@ -47,5 +46,4 @@ class TestRouter extends \Pecee\SimpleRouter\SimpleRouter
         // Return response
         return $response;
     }
-
 }

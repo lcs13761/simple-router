@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Simple\SimpleRouter\Route;
 
 use Simple\Http\Middleware\IMiddleware;
@@ -195,7 +197,7 @@ abstract class LoadableRoute extends Route implements ILoadableRoute
      */
     public function hasName(string $name): bool
     {
-        return strtolower($this->name) === strtolower($name);
+        return strtolower((string)$this->name) === strtolower((string)$name);
     }
 
     /**
@@ -273,5 +275,4 @@ abstract class LoadableRoute extends Route implements ILoadableRoute
 
         return parent::setSettings($settings, $merge);
     }
-
 }

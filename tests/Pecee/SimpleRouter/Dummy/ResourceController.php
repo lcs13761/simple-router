@@ -1,38 +1,38 @@
 <?php
-class ResourceController implements \Pecee\Controllers\IResourceController
+class ResourceController implements \Simple\Controllers\IResourceController
 {
 
-    public function index() : ?string
+    public function index(): ?string
     {
         return 'index';
     }
 
-    public function show($id) : ?string
+    public function show($id): ?string
     {
         return 'show ' . $id;
     }
 
-    public function store() : ?string
+    public function store($request): ?string
     {
         return 'store';
     }
 
-    public function create() : ?string
+    public function create(): ?string
     {
         return 'create';
     }
 
-    public function edit($id) : ?string
+    public function edit($id): ?string
     {
         return 'edit ' . $id;
     }
 
-    public function update($id) : ?string
+    public function update($request, $id): ?string
     {
         return 'update ' . $id;
     }
 
-    public function destroy($id) : ?string
+    public function destroy($id): ?string
     {
         return 'destroy ' . $id;
     }

@@ -1,6 +1,6 @@
 <?php
 
-class FindUrlBootManager implements \Pecee\SimpleRouter\IRouterBootManager
+class FindUrlBootManager implements \Simple\SimpleRouter\IRouterBootManager
 {
     protected $result;
 
@@ -12,14 +12,14 @@ class FindUrlBootManager implements \Pecee\SimpleRouter\IRouterBootManager
     /**
      * Called when router loads it's routes
      *
-     * @param \Pecee\SimpleRouter\Router $router
-     * @param \Pecee\Http\Request $request
+     * @param \Simple\SimpleRouter\Router $router
+     * @param \Simple\Http\Request $request
      */
-    public function boot(\Pecee\SimpleRouter\Router $router, \Pecee\Http\Request $request): void
+    public function boot(\Simple\SimpleRouter\Router $router, \Simple\Http\Request $request): void
     {
         $contact = $router->findRoute('contact');
 
-        if($contact !== null) {
+        if ($contact !== null) {
             $this->result = true;
         }
     }

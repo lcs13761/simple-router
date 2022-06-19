@@ -15,25 +15,26 @@ class RouterCallbackExceptionHandlerTest extends \PHPUnit\Framework\TestCase
         TestRouter::get('/my-new-url', 'DummyController@method2');
         TestRouter::get('/my-url', 'DummyController@method1');
 
-        TestRouter::error(function (\Pecee\Http\Request $request, \Exception $exception) {
+        TestRouter::error(function (\Simple\Http\Request $request, \Exception $exception) {
             throw new ExceptionHandlerException();
         });
 
         TestRouter::debug('/404-url');
     }
 
-    public function testExceptionHandlerCallback() {
+    public function testExceptionHandlerCallback()
+    {
 
-        TestRouter::group(['prefix' => null], function() {
-            TestRouter::get('/', function() {
+        TestRouter::group(['prefix' => null], function () {
+            TestRouter::get('/', function () {
                 return 'Hello world';
             });
 
             TestRouter::get('/not-found', 'DummyController@method1');
-            TestRouter::error(function(\Pecee\Http\Request $request, \Exception $exception) {
+            TestRouter::error(function (\Simple\Http\Request $request, \Exception $exception) {
 
-                if($exception instanceof \Pecee\SimpleRouter\Exceptions\NotFoundHttpException && $exception->getCode() === 404) {
-                    return $request->setRewriteCallback(static function() {
+                if ($exception instanceof \Simple\SimpleRouter\Exceptions\NotFoundHttpException && $exception->getCode() === 404) {
+                    return $request->setRewriteCallback(static function () {
                         return 'success';
                     });
                 }
@@ -43,5 +44,4 @@ class RouterCallbackExceptionHandlerTest extends \PHPUnit\Framework\TestCase
         $result = TestRouter::debugOutput('/thisdoes-not/existssss', 'get');
         $this->assertEquals('success', $result);
     }
-
 }

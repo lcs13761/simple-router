@@ -148,7 +148,7 @@ class SimpleRouter
      */
     public static function csrfVerifier(BaseCsrfVerifier|null $baseCsrfVerifier = null): void
     {
-        if($baseCsrfVerifier === null){
+        if ($baseCsrfVerifier === null) {
             $baseCsrfVerifier = new CsrfDefault();
             $baseCsrfVerifier->setTokenProvider(new SessionTokenProvider());
         }
@@ -215,7 +215,6 @@ class SimpleRouter
      */
     public static function post(string $url, $callback, array $settings = null): IRoute
     {
-       // var_dump($callback);
         return static::match([Request::REQUEST_TYPE_POST], $url, $callback, $settings);
     }
 

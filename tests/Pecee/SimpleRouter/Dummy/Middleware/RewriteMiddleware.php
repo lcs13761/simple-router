@@ -1,16 +1,16 @@
 <?php
 
-use Pecee\Http\Middleware\IMiddleware;
-use Pecee\Http\Request;
+use Simple\Http\Middleware\IMiddleware;
+use Simple\Http\Request;
 
-class RewriteMiddleware implements IMiddleware {
+class RewriteMiddleware implements IMiddleware
+{
 
-    public function handle(Request $request)  : void {
+    public function handle(Request $request): void
+    {
 
-        $request->setRewriteCallback(function() {
+        $request->setRewriteCallback(function () {
             return 'ok';
         });
-
     }
-
 }
